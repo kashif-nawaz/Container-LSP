@@ -5,3 +5,86 @@ In previous two articles I have discussed in detail how to handle increasing tra
 
 Juniper Networks has published an excellent white paper (https://www.juniper.net/assets/es/es/local/pdf/whitepapers/2000587-en.pdf) to define all the classical problems related to traffic load sharing in MPLS backbone network and how those problems would be addressed using Container LSP. But that paper does not talk about operative part and in this wiki I will endeavor to describe operative part of Container LSP.
 
+## Important Terms and Definitions 
+I have followed Juniper Networks official documentation (https://www.juniper.net/documentation/us/en/software/junos/mpls/topics/topic-map/container-lsp-configuration.html) to digest important terms and definitions. Container LSP has nominal LSP which is always present and supplementary LSPs which are created to handle increasing traffic demands and when traffic demands decrease supplementary LSPs are automatically pruned thus freeing up resources reservation which ultimately reduces control plane overhead. Process for adding up supplementary LSPs is called splitting and removing supplementary LSP is called merging. Both, splitting and merging happens at regular interval (which is called normalization interval) and decision to go  for splitting or merger is controlled by various config parameters  by considering Current-Aggr-Bw (which is sum of current reservation by all supplementary or member LSPs) and New-Aggr-Bw (which is sum of traffic rate on supplementary or member LSPs). 
+
+
+## Config Components
+### LSP Template 
+A template is required to be configured with keyword "template" under protocol mpls hierarchy and that template will be inherited by nominal LSP and all supplementary LSPs. To get understanding of various parameters defined in following template, please read my article on faster autobandwitdh adjustment available on (https://github.com/kashif-nawaz/MPLS-Auto-BW-Junos). 
+
+```
+label-switched-path LSP_TEMPLATE {
+    template;
+    priority 5 5;
+    optimize-timer 60;
+    least-fill;
+    node-link-protection;
+    in-place-lsp-bandwidth-update;
+    auto-bandwidth {
+        adjust-interval 300;
+        adjust-threshold 3;
+        adjust-threshold-activate-bandwidth 25m;
+        minimum-bandwidth 0;
+        maximum-bandwidth 10g;
+        adjust-threshold-overflow-limit 3;
+        adjust-threshold-underflow-limit 3;
+    }
+}
+```
+### Contrainer LSP
+Instead of configuring label-switch-path, container-label-switched-path config hirearchy is used under mpls hierarchy, e.g container LSP defination from PE1 to other PEs (lab topology is depicted  in below section) is appended below:-
+
+```
+protocols 
+mpls  {
+apply-groups CT_LSP;
+container-label-switched-path PE1-to-PE2 {
+    to 172.172.172.2;
+}
+container-label-switched-path PE1-to-PE3 {
+    to 172.172.172.9;
+}
+container-label-switched-path PE1-to-PE4 {
+    to 172.172.172.10;
+}
+}
+```
+I have created a Junos group CT_LSP to define container LPS paramters and applied it to protocols mpls. 
+
+```
+CT_LSP {
+    protocols {
+        mpls {
+            statistics {
+                file auto-bw;
+                interval 50;
+                auto-bandwidth;
+            }
+            container-label-switched-path <PE*-to*> {
+                label-switched-path-template {
+                    LSP_TEMPLATE;
+                }
+                splitting-merging {
+                    maximum-member-lsps 3;
+                    minimum-member-lsps 1;
+                    splitting-bandwidth 150m;
+                    merging-bandwidth 100m;
+                    normalization {
+                        normalize-interval 300;
+                    }
+                    sampling {
+                        use-percentile 90;
+                    }
+                }
+            }
+        }
+    }
+}
+```
+
+Container LSP is cofigured with template that defines 
+## Lab Topology
+![Topology](./images/topology.png)
+
+Tester1 on left side will intiate traffic flows towards Tester2 , it is assumed that LSP ingress PE1-to-PE3 will take trafifc 
