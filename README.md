@@ -8,6 +8,9 @@ Juniper Networks has published an excellent white paper (https://www.juniper.net
 ## Important Terms and Definitions 
 I have followed Juniper Networks official documentation (https://www.juniper.net/documentation/us/en/software/junos/mpls/topics/topic-map/container-lsp-configuration.html) to digest important terms and definitions. Container LSP has nominal LSP which is always present and supplementary LSPs which are created to handle increasing traffic demands and when traffic demands decrease supplementary LSPs are automatically pruned thus freeing up resources reservation which ultimately reduces control plane overhead. Process for adding up supplementary LSPs is called splitting and removing supplementary LSP is called merging. Both, splitting and merging happens at regular interval (which is called normalization interval) and decision to go  for splitting or merger is controlled by various config parameters  by considering Current-Aggr-Bw (which is sum of current reservation by all supplementary or member LSPs) and New-Aggr-Bw (which is sum of traffic rate on supplementary or member LSPs). 
 
+## Lab Topology
+![Topology](./images/topology.png)
+
 
 ## Config Components
 ### LSP Template 
@@ -33,7 +36,7 @@ label-switched-path LSP_TEMPLATE {
 }
 ```
 ### Contrainer LSP
-Instead of configuring label-switch-path, container-label-switched-path config hirearchy is used under mpls hierarchy, e.g container LSP defination from PE1 to other PEs (lab topology is depicted  in below section) is appended below:-
+Instead of configuring label-switch-path, container-label-switched-path config hirearchy is used under mpls hierarchy, e.g container LSP defination from PE1 to other PEs (lab topology is depicted  above) is appended below:-
 
 ```
 protocols 
@@ -84,7 +87,3 @@ CT_LSP {
 ```
 
 Container LSP is cofigured with template that defines 
-## Lab Topology
-![Topology](./images/topology.png)
-
-Tester1 on left side will intiate traffic flows towards Tester2 , it is assumed that LSP ingress PE1-to-PE3 will take trafifc 
