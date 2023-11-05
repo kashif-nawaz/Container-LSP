@@ -102,6 +102,7 @@ Explaination about parameters used under splitting-merging hierarchy.
 * maximum-signaling-bandwidth, defines maximum bandwidth to be signalled for each member LSP. 
 * minimum-signaling-bandwidth, defines minimum bandwidth to be signalled for each member LSP.
 * normalization normalize-interval, defines time period after which LSP splitting / merger would happen.
+* sampling , use-percentile specify the ingress route to take x prenctile value from all the bandwidth samples and use that for normalization. It is mutely exclusive to use-average-aggregate which means ingress router to take average of aggregate samples and use that for normalization.
 
 
 ### Operational Verification
