@@ -94,6 +94,15 @@ protocols {
 }
 }
 ```
+Explaination about parameters used under splitting-merging hierarchy. 
+* maximum-member-lsps , defines maximum number of LSPs created by splitting action.
+* minimum-member-lsps , defines minimum number of LSPs that should remain active.
+* splitting-bandwidth, defines the bandwitdh utilization limit to trigger splitting action. 
+* merging-bandwidth, defines the lowest bandwitdh utilization limit  to trigger merg action.
+* maximum-signaling-bandwidth, defines maximum bandwidth to be signalled for each member LSP. 
+* minimum-signaling-bandwidth, defines minimum bandwidth to be signalled for each member LSP.
+* normalization normalize-interval, defines time period after which LSP splitting / merger would happen.
+
 
 ### Operational Verification
 
