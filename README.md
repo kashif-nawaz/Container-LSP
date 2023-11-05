@@ -80,6 +80,7 @@ protocols {
                 merging-bandwidth 10m;
                 maximum-signaling-bandwidth 10m;
                 minimum-signaling-bandwidth 10m;
+                splitting-merging-threshold 10;
                 normalization {
                     normalize-interval 400;
                     failover-normalization;
@@ -101,8 +102,10 @@ Explaination about parameters used under splitting-merging hierarchy.
 * merging-bandwidth, defines the lowest bandwitdh utilization limit  to trigger merg action.
 * maximum-signaling-bandwidth, defines maximum bandwidth to be signalled for each member LSP. 
 * minimum-signaling-bandwidth, defines minimum bandwidth to be signalled for each member LSP.
+* splitting-merging-threshold , dicates how splitting and merging would happen by comparing New-Aggr-Bw and  Current-Aggr-Bw values. 
 * normalization normalize-interval, defines time period after which LSP splitting / merger would happen.
 * sampling , use-percentile specify the ingress route to take x prenctile value from all the bandwidth samples and use that for normalization. It is mutely exclusive to use-average-aggregate which means ingress router to take average of aggregate samples and use that for normalization.
+* sampling, cut-off-threshold specifies the percentile value to be used as a cut-off threshold in removing outlier bandwidth samples
 
 
 ### Operational Verification
