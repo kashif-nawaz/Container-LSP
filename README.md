@@ -39,8 +39,11 @@ label-switched-path LSP_TEMPLATE {
 Instead of configuring label-switch-path, container-label-switched-path config hirearchy is used under mpls hierarchy, e.g container LSP defination from PE1 to other PEs (lab topology is depicted  above) is appended below:-
 
 ```
-protocols 
-mpls  {
+protocols {
+    mpls {
+apply-groups CT_LSP;
+icmp-tunneling;
+ipv6-tunneling;
 apply-groups CT_LSP;
 container-label-switched-path PE1-to-PE2 {
     to 172.172.172.2;
@@ -52,37 +55,43 @@ container-label-switched-path PE1-to-PE4 {
     to 172.172.172.10;
 }
 }
+}
 ```
 I have created a Junos group CT_LSP to define container LPS paramters and applied it to protocols mpls. 
 
 ```
-CT_LSP {
-    protocols {
-        mpls {
-            statistics {
-                file auto-bw;
-                interval 50;
-                auto-bandwidth;
+groups {
+CT_LSP 
+protocols {
+    mpls {
+        statistics {
+            file auto-bw;
+            interval 50;
+            auto-bandwidth;
+        }
+        container-label-switched-path <PE*-to*> {
+            label-switched-path-template {
+                LSP_TEMPLATE;
             }
-            container-label-switched-path <PE*-to*> {
-                label-switched-path-template {
-                    LSP_TEMPLATE;
+            splitting-merging {
+                maximum-member-lsps 3;
+                minimum-member-lsps 1;
+                splitting-bandwidth 150m;
+                merging-bandwidth 10m;
+                maximum-signaling-bandwidth 10m;
+                minimum-signaling-bandwidth 10m;
+                normalization {
+                    normalize-interval 400;
+                    failover-normalization;
                 }
-                splitting-merging {
-                    maximum-member-lsps 3;
-                    minimum-member-lsps 1;
-                    splitting-bandwidth 150m;
-                    merging-bandwidth 100m;
-                    normalization {
-                        normalize-interval 300;
-                    }
-                    sampling {
-                        use-percentile 90;
-                    }
+                sampling {
+                    cut-off-threshold 1;
+                    use-percentile 90;
                 }
             }
         }
     }
+}
 }
 ```
 
