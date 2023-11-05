@@ -105,7 +105,7 @@ Explaination about parameters used under splitting-merging hierarchy.
 * splitting-merging-threshold , dicates how splitting and merging would happen by comparing New-Aggr-Bw and  Current-Aggr-Bw values. 
 * normalization normalize-interval, defines time period after which LSP splitting / merger would happen.
 * sampling , use-percentile specify the ingress route to take x prenctile value from all the bandwidth samples and use that for normalization. It is mutely exclusive to use-average-aggregate which means ingress router to take average of aggregate samples and use that for normalization.
-* sampling, cut-off-threshold specifies the percentile value to be used as a cut-off threshold in removing outlier bandwidth samples
+* sampling, cut-off-threshold specifies the percentile value to be used as a cut-off threshold in removing outlier bandwidth samples.
 
 
 ### Operational Verification
