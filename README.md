@@ -109,6 +109,7 @@ Explaination about parameters used under splitting-merging hierarchy.
 
 
 ### Operational Verification
+CLI commands to inspect container LSPs is different than the normal LSP. Below output shows that PE1-to-PE3 has 3 instances and extensive output shows in depth information about split events. 
 
 ```
 root@PE1> show mpls container-lsp ingress terse   
