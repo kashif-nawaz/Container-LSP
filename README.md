@@ -84,6 +84,8 @@ protocols {
                 normalization {
                     normalize-interval 400;
                     failover-normalization;
+                    normalization-retry-duration 60;
+                    normalization-retry-limits 3;
                 }
                 sampling {
                     cut-off-threshold 1;
