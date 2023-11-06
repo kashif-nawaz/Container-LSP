@@ -65,7 +65,7 @@ protocols {
     mpls {
         statistics {
             file auto-bw;
-            interval 50;
+            interval 60;
             auto-bandwidth;
         }
         container-label-switched-path <PE*-to*> {
