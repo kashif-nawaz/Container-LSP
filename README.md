@@ -28,7 +28,6 @@ label-switched-path LSP_TEMPLATE {
         adjust-interval 300;
         adjust-threshold 3;
         adjust-threshold-activate-bandwidth 25m;
-        minimum-bandwidth 0;
         maximum-bandwidth 10g;
         adjust-threshold-overflow-limit 3;
         adjust-threshold-underflow-limit 3;
