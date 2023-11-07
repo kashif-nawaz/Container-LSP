@@ -577,3 +577,7 @@ Container LSP name: PE1-to-PE3, State: Up, Member count: 3
           172.172.172.4(flag=0x29) 10.0.1.5(flag=9 Label=11427) 172.172.172.6(flag=0x29) 10.0.1.19(flag=9 Label=7443) 172.172.172.8(flag=0x21) 10.0.1.29(flag=1 Label=14844) 172.172.172.9(flag=0x20) 10.0.1.39(Label=3)
 Total 3 displayed, Up 3, Down 0
 ```
+
+## Conclusion
+
+Dynamically created / pruned parallel LSPs coupled with faster auto bandwidth adjustment and well thought CoS configuration in MPLS backbone networks are prefect ingredients of traffic congestion handling recipe. 
