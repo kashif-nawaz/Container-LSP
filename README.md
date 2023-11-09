@@ -22,6 +22,7 @@ label-switched-path LSP_TEMPLATE {
     priority 5 5;
     optimize-timer 60;
     least-fill;
+    retry-timer 30; 
     node-link-protection;
     in-place-lsp-bandwidth-update;
     auto-bandwidth {
@@ -34,6 +35,7 @@ label-switched-path LSP_TEMPLATE {
     }
 }
 ```
+* retry-timer, Smaller lsp-retry-timer leads to more number of retries in case of adjustments. It is better to keep this value higher or keep it as default as aggressive lsp-retry-timer value could cause issue in scaled environment.
 ### Contrainer LSP
 Instead of configuring label-switch-path, container-label-switched-path config hirearchy is used under mpls hierarchy, e.g container LSP defination from PE1 to other PEs (lab topology is depicted  above) is appended below:-
 
@@ -104,7 +106,10 @@ Explaination about parameters used under splitting-merging hierarchy.
 * maximum-signaling-bandwidth, defines maximum bandwidth to be signalled for each member LSP. 
 * minimum-signaling-bandwidth, defines minimum bandwidth to be signalled for each member LSP.
 * splitting-merging-threshold , dicates how splitting and merging would happen by comparing New-Aggr-Bw and  Current-Aggr-Bw values. 
-* normalization normalize-interval, defines time period after which LSP splitting / merger would happen.
+* normalization normalize-interval, defines time period after which LSP splitting / merger would happen. It's value can not be less than auto-bandwidth adjust-interval. 
+* failover-normalization, it enable ingress router to pro-actively normalize or re-distribute traffic when a link or node failure happens on a member LSP. A member LSP can go down between two scheduled normalization events because of a link-failure or pre-emption.
+* normalization-retry-duration, retry duration after an-successful normalization attempt.  Normalization retry duration should not be less than the lsp-retry-timer, which is 30 by default and is configurable under label-switched-path  template. 
+* normalization-retry-limits, It control maximum attempts at ingress router for normalization until a sufficient number of LSPs come up successfully with new bandwidth values.
 * sampling , use-percentile specify the ingress route to take x prenctile value from all the bandwidth samples and use that for normalization. It is mutely exclusive to use-average-aggregate which means ingress router to take average of aggregate samples and use that for normalization.
 * sampling, cut-off-threshold specifies the percentile value to be used as a cut-off threshold in removing outlier bandwidth samples.
 
